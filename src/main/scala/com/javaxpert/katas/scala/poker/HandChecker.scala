@@ -11,6 +11,14 @@ object HandChecker {
       .filter((rank, list) => list.size == 2)
       .size >= 1
 
+  def contains2Pairs(hand: Hand):Boolean={
+    hand.cards
+      .groupBy(_.rank)
+      .filter(_._2.isEmpty == false)
+      .filter((rank, list) => list.size == 2)
+      .size == 2
+  }
+
 
   @main
   def runChecks():Unit={

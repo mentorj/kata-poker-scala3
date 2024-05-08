@@ -9,10 +9,20 @@ class CardsCheckerSpec extends FunSuite{
     val listWith1Pair:List[Card] = List(Card(ACE,HEART),Card(Rank.ACE,SPADE))
     val incompleteHandWithPair = Hand(listWith1Pair)
     assert(HandChecker.containsPair(incompleteHandWithPair))
-    
+
     val listWithoutPair:List[Card]  = List(Card(ACE,TREFLE),Card(SIX,Color.SPADE))
     val incompleteHandWithoutPair = Hand(listWithoutPair)
     assert(HandChecker.containsPair(incompleteHandWithoutPair)==false)
+  }
+
+  test("checker detects 2 pairs"){
+    val listWith1Pair: List[Card] = List(Card(ACE, HEART), Card(Rank.ACE, SPADE))
+    val incompleteHandWithPair = Hand(listWith1Pair)
+    assert(HandChecker.contains2Pairs(incompleteHandWithPair)==false)
+
+    val listWith2Pairs: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE),Card(SIX,HEART),Card(SIX,TREFLE))
+    val incompleteHandWith2Pairs = Hand(listWith2Pairs)
+    assert(HandChecker.containsPair(incompleteHandWith2Pairs) )
   }
 
 }
