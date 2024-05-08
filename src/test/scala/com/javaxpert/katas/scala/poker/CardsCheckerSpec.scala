@@ -25,4 +25,14 @@ class CardsCheckerSpec extends FunSuite{
     assert(HandChecker.containsPair(incompleteHandWith2Pairs) )
   }
 
+  test("checker detects brelan") {
+    val listWith1Pair: List[Card] = List(Card(ACE, HEART), Card(Rank.ACE, SPADE))
+    val incompleteHandWithPair = Hand(listWith1Pair)
+    assert(HandChecker.handContainsBrelan(incompleteHandWithPair) == false)
+
+    val listWithBrelan: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE), Card(ACE, HEART))
+    val incompleteHandWithBrelan = Hand(listWithBrelan)
+    assert(HandChecker.handContainsBrelan(incompleteHandWithBrelan))
+  }
+
 }

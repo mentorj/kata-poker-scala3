@@ -18,6 +18,13 @@ object HandChecker {
       .filter((rank, list) => list.size == 2)
       .size == 2
   }
+  
+  def handContainsBrelan(hand: Hand):Boolean={
+    hand.cards
+      .groupBy(_.rank)
+      .filter((rank,list) => list.size == 3)
+      .size ==1
+  }
 
 
   @main
