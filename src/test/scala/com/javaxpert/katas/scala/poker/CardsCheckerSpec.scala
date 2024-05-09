@@ -52,5 +52,9 @@ class CardsCheckerSpec extends FunSuite{
     assert(HandChecker.hansIsAFull(completeHandWithFull))
 
   }
-
+  test("checker detects squares") {
+    val listWithSquare: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE), Card(ACE, HEART), Card(Rank.ACE, DIAMOND), Card(SEVEN, DIAMOND))
+    val handWithSquare: Hand = Hand(listWithSquare)
+    assert(HandChecker.handContainsSquare(handWithSquare))
+  }
 }

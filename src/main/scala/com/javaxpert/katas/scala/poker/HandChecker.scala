@@ -59,6 +59,9 @@ def hansIsAFull(hand:Hand):Boolean={
   handContainsBrelan(hand) && containsPair(hand)
 }
 
+def handContainsSquare(hand:Hand):Boolean=
+  handContainsNumInstancesOfSameCardsByRank(hand)(1)(4)
+
   @main
   def runChecks():Unit={
     val cards :List[Card] = List(Card(ACE,TREFLE),Card(ACE,HEART))
