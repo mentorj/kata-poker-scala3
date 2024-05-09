@@ -1,5 +1,5 @@
 package com.javaxpert.katas.scala.poker
-enum Rank {
+enum Rank extends Selectable {
   case ACE,
   TWO,
   THREE,

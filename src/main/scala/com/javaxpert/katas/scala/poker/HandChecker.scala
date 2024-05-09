@@ -1,38 +1,28 @@
 package com.javaxpert.katas.scala.poker
 
-import com.javaxpert.katas.scala.poker.Color.{HEART, TREFLE}
-import com.javaxpert.katas.scala.poker.Rank.ACE
 
-import com.javaxpert.katas.scala.poker.CardOrdering
 object HandChecker {
 
-  def handContainsNumInstancesOfSameCardsByRank(hand:Hand)(numberOfInstances:Int)(patternByRank:Int):Boolean=
-    hand.cards
-      .groupBy(_.rank)
-      .filter((rank, list) => list.size == patternByRank)
-      .size == numberOfInstances
+
+  def handConformsToCriteria(hand:Hand)(desiredInstances:Int)(f:Card => Selectable)(patternForSelector:Int) : Boolean =
+    hand.cards.groupBy((c) => f.apply(c))
+      .filter((rank, list) => list.size == patternForSelector)
+      .size==desiredInstances
 
   def containsPair(hand: Hand): Boolean =
-      handContainsNumInstancesOfSameCardsByRank(hand)(1)(2)
+      handConformsToCriteria(hand)(1)(_.rank)(2)
 
-  def contains2Pairs(hand: Hand):Boolean={
-      handContainsNumInstancesOfSameCardsByRank(hand)(2)(2)
-  }
+  def contains2Pairs(hand: Hand):Boolean=
+    handConformsToCriteria(hand)(2)(_.rank)(2)
 
-  def handContainsBrelan(hand: Hand):Boolean={
-      handContainsNumInstancesOfSameCardsByRank(hand)(1)(3)
-  }
+  def handContainsBrelan(hand: Hand):Boolean=
+    handConformsToCriteria(hand)(1)(_.rank)(3)
 
-  def sortByCardRank(c1: Card, c2: Card) = {
+  def sortByCardRank(c1: Card, c2: Card) =
     c1.rank.ordinal > c2.rank.ordinal
-  }
 
   def handContainsColor(hand: Hand):Boolean=
-    hand.cards
-      .sortWith(sortByCardRank)
-      .groupBy(_.color)
-      .filter((rank, list) => list.size == 5)
-      .isEmpty==false
+    handConformsToCriteria(hand)(1)(_.color)(5)
 
 
 def hansIsAFull(hand:Hand):Boolean={
@@ -40,8 +30,7 @@ def hansIsAFull(hand:Hand):Boolean={
 }
 
 def handContainsSquare(hand:Hand):Boolean=
-  handContainsNumInstancesOfSameCardsByRank(hand)(1)(4)
-
+  handConformsToCriteria(hand)(1)(_.rank)(4)
 
 def handContainsQuinte(hand:Hand):Boolean=
   hand.cards
@@ -53,14 +42,6 @@ def handContainsQuinte(hand:Hand):Boolean=
     .isEmpty == false
 
 
-  @main
-  def runChecks():Unit={
-    val cards :List[Card] = List(Card(ACE,TREFLE),Card(ACE,HEART))
-    val hand :Hand  = Hand(cards)
-
-    println(hand.cards.groupBy(_.rank))
-    println(s"Hand contains pair ? = ${containsPair(hand)}")
-  }
 
 
 }
