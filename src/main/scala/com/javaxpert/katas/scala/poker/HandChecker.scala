@@ -55,7 +55,9 @@ object HandChecker {
       .isEmpty==false
 
 
-
+def hansIsAFull(hand:Hand):Boolean={
+  handContainsBrelan(hand) && containsPair(hand)
+}
 
   @main
   def runChecks():Unit={

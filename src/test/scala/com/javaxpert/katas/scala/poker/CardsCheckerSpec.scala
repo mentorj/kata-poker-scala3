@@ -1,6 +1,6 @@
 package com.javaxpert.katas.scala.poker
 
-import com.javaxpert.katas.scala.poker.Color.{HEART, SPADE, TREFLE}
+import com.javaxpert.katas.scala.poker.Color.{DIAMOND, HEART, SPADE, TREFLE}
 import com.javaxpert.katas.scala.poker.Rank.{ACE, EIGHT, SEVEN, SIX}
 import munit.FunSuite
 
@@ -45,6 +45,12 @@ class CardsCheckerSpec extends FunSuite{
     val listContainsColor :List[Card] = List(Card(SIX,SPADE),Card(SEVEN,SPADE),Card(EIGHT,SPADE),Card(Rank.NINE,Color.SPADE),Card(Rank.TEN,SPADE))
     val handWithColor = Hand(listContainsColor)
     assert(HandChecker.handContainsColor(handWithColor))
+  }
+  test("checker detects a full"){
+    val listWithFull: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE), Card(ACE, HEART),Card(SEVEN,SPADE),Card(SEVEN,DIAMOND))
+    val completeHandWithFull = Hand(listWithFull)
+    assert(HandChecker.hansIsAFull(completeHandWithFull))
+
   }
 
 }
