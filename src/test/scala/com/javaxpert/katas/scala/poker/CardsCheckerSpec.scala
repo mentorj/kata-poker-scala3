@@ -6,6 +6,8 @@ import munit.FunSuite
 
 class CardsCheckerSpec extends FunSuite{
   test("checker detects pair"){
+    assert(HandChecker.containsPair(Hand(List.empty))==false)
+
     val listWith1Pair:List[Card] = List(Card(ACE,HEART),Card(Rank.ACE,SPADE))
     val incompleteHandWithPair = Hand(listWith1Pair)
     assert(HandChecker.containsPair(incompleteHandWithPair))
@@ -22,7 +24,7 @@ class CardsCheckerSpec extends FunSuite{
 
     val listWith2Pairs: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE),Card(SIX,HEART),Card(SIX,TREFLE))
     val incompleteHandWith2Pairs = Hand(listWith2Pairs)
-    assert(HandChecker.containsPair(incompleteHandWith2Pairs) )
+    assert(HandChecker.contains2Pairs(incompleteHandWith2Pairs) )
   }
 
   test("checker detects brelan") {
