@@ -38,9 +38,6 @@ class CardsCheckerSpec extends FunSuite{
   }
 
   test("checker detects a  hand with color"){
-    val listWith5CardsWithSameColor :List[Card] = List(Card(ACE,SPADE),Card(SEVEN,SPADE),Card(EIGHT,SPADE),Card(Rank.NINE,Color.SPADE),Card(Rank.TEN,SPADE))
-    val handDoesNotContainColor = Hand(listWith5CardsWithSameColor)
-    assert(HandChecker.handContainsColor(handDoesNotContainColor)==false)
 
     val listContainsColor :List[Card] = List(Card(SIX,SPADE),Card(SEVEN,SPADE),Card(EIGHT,SPADE),Card(Rank.NINE,Color.SPADE),Card(Rank.TEN,SPADE))
     val handWithColor = Hand(listContainsColor)
@@ -56,5 +53,13 @@ class CardsCheckerSpec extends FunSuite{
     val listWithSquare: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE), Card(ACE, HEART), Card(Rank.ACE, DIAMOND), Card(SEVEN, DIAMOND))
     val handWithSquare: Hand = Hand(listWithSquare)
     assert(HandChecker.handContainsSquare(handWithSquare))
+  }
+
+  test("checker detects quinte flush"){
+    val listWith5CardsWithQuinteFlush: List[Card] = List(Card(SEVEN, SPADE), Card(SIX, SPADE), Card(EIGHT, SPADE), Card(Rank.NINE, Color.SPADE), Card(Rank.TEN, SPADE))
+
+    assert(HandChecker.handContainsQuinte(Hand(listWith5CardsWithQuinteFlush)) )
+    val listWithColor :List[Card]   = List(Card(ACE,SPADE),Card(SIX,SPADE),Card(EIGHT,SPADE),Card(Rank.NINE,Color.SPADE),Card(Rank.TEN,SPADE))
+    assert(HandChecker.handContainsQuinte(Hand(listWithColor))==false)
   }
 }
