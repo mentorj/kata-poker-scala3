@@ -1,0 +1,17 @@
+@startuml
+title "Kata poker - static model initial"
+class Card{
+  color:Color
+  rank:Rank
+}
+enum Rank
+enum Color
+class Hand
+class HandChecker
+
+HandChecker -- Hand :evaluateHand
+
+Hand  "1" *-- "5" Card : contains
+
+
+@enduml

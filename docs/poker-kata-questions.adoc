@@ -1,0 +1,68 @@
+# Poker kata  - questions
+
+## Introduction
+
+This kata is intended to  be done step by step , using a TDD style
+Ensure to write tests before code, it is quite valuable during the kata because of the many refactoring done during this exercise.
+
+For those not specialist in poker please google for a poker dedicated website using some keyworkds like ; poker hand evaluation
+This link is in french : https://fr.pokerstrategy.com/poker-hand-charts-evaluations/[poker hand evaluator]
+
+## Instructions
+Use  git tags found in this repo to get solutions at any step.
+[source]
+----
+git tag -l # <.>
+----
+<.> list tags for a git repo
+
+Select your tagname then  checkout this tag
+[source]
+----
+git checkout <tagname>
+----
+
+## Kata steps
+### Step 1
+Check that a hand contains a pair. A pair means 2 cards with the same _rank_ in your hand.
+You may use the initial-model UML model found in docs folder as an inspiring source.
+
+
+### Step 2
+Check that a hand contains 2 pairs. A pair means 2 cards with the same _rank_ in your hand.
+
+### Step 3
+
+Check that a hand contains a _brelan_ meaning 3 cards with same rank.
+We 'll add detection for squares in the same step. Squares are hands with 4 cards sharing the same _rank_
+
+### Step 3 bis
+Time to look at your code & to search for _patterns_ in your solution.
+Let'refactor this code base.
+
+### Step 4
+Let's detect quinte in your hands. A _quinte_ means 5 cards with ranks in a suite fashion whatever  their respective color is. Then this step is about sorting collections. You can use the model-with-trait UML model to refactor your  code.
+
+### Step 5
+Let's detect a color in your hands..Colors are hands with all cards with the same suit.
+
+### Step 6
+Time to check for full!! A full is a hand with a brelan & a pair...
+Quite easy to implement!!!
+
+### Step 7
+Now it is time to check for  quinte flush.A quinte  flush is a special case for quinte & color . It is a quinte where all cards share the same color.
+
+### Step 7 bis
+Time for watching for patterns in your code. Could  we refactor our code to avoid those copy/paste ? We may expect to keep 2 only functions called by the checkForBrelan/Square/Quinte by the end of this refactoring...
+
+### Step 7 ter
+Humm, having 2 functions is too much can you imagine a way to keep a single function? Thanks to _HoF_ we can do this & pass arguments & even functions to makee it generic.
+
+### Step 8
+Time to check for the best hand possible : royal quinte flush. But you may see the problem with the rank ACE now ? How to cope with this problem? Let's refactor our code & fix this problem. We should add more tests in our code, we may have detected this problem earlier!!
+
+### Step 9
+
+We can now evaluate  hands with a  scoring policy.
+As this rule is a fixed one and will not change we can use _pattern matching_ to give a score to any hand.

@@ -1,0 +1,25 @@
+@startuml
+title "Kata poker - static model with Selectable trait"
+class Card{
+  color:Color
+  rank:Rank
+}
+enum Rank
+enum Color
+class Hand
+class HandChecker
+interface Selectable
+
+note right of Selectable
+  Selectable enables us to choose how to group cards
+  It is an empty trait but valuable for strong typing.
+end note
+
+Selectable <|-- Rank
+Selectable <|-- Color
+HandChecker -- Hand :evaluateHand
+
+Hand  "1" *-- "5" Card : contains
+
+
+@enduml
