@@ -1,9 +1,11 @@
 package com.javaxpert.katas.scala.poker
 
 import com.javaxpert.katas.scala.poker.Color.{DIAMOND, HEART, SPADE, TREFLE}
-import com.javaxpert.katas.scala.poker.Rank.{ACE, EIGHT, SEVEN, SIX}
+import com.javaxpert.katas.scala.poker.Rank.{ACE, EIGHT, FIVE, KING, QUEEN, SEVEN, SIX, THREE}
 import munit.FunSuite
 
+import scala.util.Sorting
+import scala.math.Ordering.Implicits.*
 class CardsCheckerSpec extends FunSuite{
   test("checker detects pair"){
     assert(HandChecker.containsPair(Hand(List.empty))==false)
@@ -61,5 +63,17 @@ class CardsCheckerSpec extends FunSuite{
     assert(HandChecker.handContainsQuinte(Hand(listWith5CardsWithQuinteFlush)) )
     val listWithColor :List[Card]   = List(Card(ACE,SPADE),Card(SIX,SPADE),Card(EIGHT,SPADE),Card(Rank.NINE,Color.SPADE),Card(Rank.TEN,SPADE))
     assert(HandChecker.handContainsQuinte(Hand(listWithColor))==false)
+
+    val listWithQuinteAceLow = List(Card(FIVE, SPADE), Card(Rank.FOUR, SPADE), Card(THREE, SPADE), Card(Rank.TWO, Color.SPADE), Card(Rank.ACE, SPADE))
+    assert(HandChecker.handContainsQuinte(Hand(listWithQuinteAceLow) ) )
+
   }
+  test("checker detects royal quinte flush"){
+
+    val listWithQuinteAceHigh = List(Card(ACE, SPADE), Card(Rank.QUEEN, SPADE), Card(Rank.JACK, SPADE), Card(Rank.KING, Color.SPADE), Card(Rank.TEN, SPADE))
+    assert(HandChecker.handContainsQuinteFlushRoyal(Hand(listWithQuinteAceHigh)))
+  }
+
+
+
 }
