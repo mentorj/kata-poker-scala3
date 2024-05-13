@@ -4,7 +4,7 @@ package com.javaxpert.katas.scala.poker
 object HandChecker {
 
 
-  def handConformsToCriteria(hand: Hand)(desiredInstances: Int)(f: Card => Selectable)(patternForSelector: Int)(cardsPostFilterPredicate: (List[Card]) => Boolean): Boolean =
+  def handConformsToCriteria(desiredInstances: Int)(f: Card => Selectable)(patternForSelector: Int)(cardsPostFilterPredicate: (List[Card]) => Boolean)(hand: Hand): Boolean =
     hand.cards
       .sortWith(sortByCardRank)
       .groupBy((c) => f.apply(c))
@@ -21,13 +21,13 @@ object HandChecker {
 
 
   def containsPair(hand: Hand): Boolean =
-    handConformsToCriteria(hand)(1)(_.rank)(2)(_ => true)
+    handConformsToCriteria(1)(_.rank)(2)(_ => true)(hand)
 
   def contains2Pairs(hand: Hand): Boolean =
-    handConformsToCriteria(hand)(2)(_.rank)(2)(_ => true)
+    handConformsToCriteria(2)(_.rank)(2)(_ => true)(hand)
 
   def handContainsBrelan(hand: Hand): Boolean =
-    handConformsToCriteria(hand)(1)(_.rank)(3)(_ => true)
+    handConformsToCriteria(1)(_.rank)(3)(_ => true)(hand)
 
   def sortByCardRank(c1: Card, c2: Card): Boolean =
     c1.rank.ordinal > c2.rank.ordinal
@@ -45,7 +45,7 @@ object HandChecker {
   }
 
   def handContainsColor(hand: Hand): Boolean =
-    handConformsToCriteria(hand)(1)(_.color)(5)(_ => true)
+    handConformsToCriteria(1)(_.color)(5)(_ => true)(hand)
 
 
   def hansIsAFull(hand: Hand): Boolean = {
@@ -53,13 +53,13 @@ object HandChecker {
   }
 
   def handContainsSquare(hand: Hand): Boolean = {
-    handConformsToCriteria(hand)(1)(_.rank)(4)(_ => true)
+    handConformsToCriteria(1)(_.rank)(4)(_ => true)(hand)
   }
 
   def handContainsQuinte(hand: Hand): Boolean = {
     val pred = (cards: List[Card]) =>
       Math.abs(cards.apply(0).rank.ordinal - cards.apply(4).rank.ordinal) == 4
-    handConformsToCriteria(hand)(1)(_.color)(5)(pred)
+    handConformsToCriteria(1)(_.color)(5)(pred)(hand)
   }
 
   def handContainsQuinteFlushRoyal(hand: Hand):Boolean={
@@ -67,9 +67,9 @@ object HandChecker {
       println(s"cards in handContainsQuinteFlushRoyal is ${cards}")
       cards(0).rank==Rank.ACE && cards(4).rank==Rank.TEN
     }
-    val filterHandWith5CardsWithSameColor = handConformsToCriteria(hand)(1)(_.color)(5)
-    handConformsToCriteria(hand)(1)(_.color)(5)(pred)
-    //filterHandWith5CardsWithSameColor.apply()
+    val filterHandWith5CardsWithSameColor = handConformsToCriteria(1)(_.color)(5)
+    //handConformsToCriteria(1)(_.color)(5)(pred)(hand)
+    filterHandWith5CardsWithSameColor.apply(pred)(hand)
   }
   
 
