@@ -62,6 +62,10 @@ Humm, having 2 functions is too much can you imagine a way to keep a single func
 ### Step 8
 Time to check for the best hand possible : royal quinte flush. But you may see the problem with the rank ACE now ? How to cope with this problem? Let's refactor our code & fix this problem. We should add more tests in our code, we may have detected this problem earlier!!
 
+### Step 8bis
+Refactor the code to enable function reuse and simpler  code with partially applied functions.
+
+
 ### Step 9
 
 We can now evaluate  hands with a  scoring policy.
