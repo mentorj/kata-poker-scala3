@@ -65,6 +65,8 @@ Time to check for the best hand possible : royal quinte flush. But you may see t
 ### Step 8bis
 Refactor the code to enable function reuse and simpler  code with partially applied functions.
 
+### Step 8ter
+Our solution is crappy with 2 evaluations while a single one  is required . Let's refactor our code to remove that monster!!! Once again adding a parameter to our HoF is the solution and using partially applied functions will make the code quite readable...
 
 ### Step 9
 
