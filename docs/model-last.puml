@@ -1,0 +1,42 @@
+@startuml
+title "Kata poker - static model with Selectable trait and Hand evaluation"
+class Card{
+  color:Color
+  rank:Rank
+}
+enum Rank
+enum Color
+enum HandStrength
+class Hand
+class HandChecker
+class HandEvaluation{
+  strength: HandStrength
+  rank: Rank
+}
+note bottom of HandEvaluation
+  instances from this class are used for scoring hands.
+  Any hand score will use the strength (quinte,pair..).
+  Comparing 2 hands with same strength  requires knowledge from the rank (pair to the ACE rank or SQUARE to the TEN rank)
+end note
+
+interface Selectable
+
+note bottom of Selectable
+  Selectable enables us to choose how to group cards
+  It is an empty trait but valuable for strong typing.
+end note
+
+note bottom of HandEvaluation
+   This enum stores the different qualifiers for a hand .
+end note
+
+Selectable <|-- Rank
+Selectable <|-- Color
+HandChecker -- Hand :evaluateHand
+Card -- Rank :uses
+Card -- Color :uses
+HandChecker -- HandEvaluation :uses
+Hand  "1" *-- "5" Card : contains
+
+
+@enduml

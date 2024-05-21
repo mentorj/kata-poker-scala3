@@ -71,4 +71,6 @@ Our solution is crappy with 2 evaluations while a single one  is required . Let'
 ### Step 9
 
 We can now evaluate  hands with a  scoring policy.
-As this rule is a fixed one and will not change we can use _pattern matching_ to give a score to any hand.
+As this rule is a fixed one and will not change we can use _pattern matching_ to give a score to any hand. But before going into scoring we have to refactor our code to get the best cards combo contained into our hand. We have to change our methods returning a boolean to something more useful: an Option wrapping the hand evaluation (strength + rank). Quite a lot of work to do during this round...
+
+hint: we will use most of our high level methods handContainsPair... store them into one collection and find the best evaluation of our hand (as given by the function returning a Some(eval,rank) ) while using the right Collection  function.  Once this result obtained a last function will score the hand...
