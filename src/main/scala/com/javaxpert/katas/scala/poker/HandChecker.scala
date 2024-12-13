@@ -12,8 +12,7 @@ object HandChecker {
       .sortWith(sortBy)
       .groupBy((c) => f.apply(c))
       .filter((rank, list) => list.size == patternForSelector)
-      .filter((rank, list) => cardsPostFilterPredicate.apply(list))
-      .size == desiredInstances
+      .count((rank, list) => cardsPostFilterPredicate.apply(list)) == desiredInstances
 
 
   def containsPair(hand: Hand): Option[HandEvaluation] =
@@ -21,7 +20,7 @@ object HandChecker {
     val has1Pair = handConformsToCriteria(1)(_.rank)(sortByCardRank)(2)(_ => true)(hand)
     println(s"has1Pair ? =${has1Pair}")
     has1Pair  match {
-      case true => Some(HandEvaluation(HandStrength.QUINTE, Rank.ACE))
+      case true => Some(HandEvaluation(HandStrength.PAIR, Rank.ACE))
       case _ => None
     }
 
@@ -85,9 +84,11 @@ object HandChecker {
   }
 
   def handContainsQuinte(hand: Hand): Option[HandEvaluation] = {
+    println("entering handContainsQuinte...")
     val pred = (cards: List[Card]) =>
       Math.abs(cards.apply(0).rank.ordinal - cards.apply(4).rank.ordinal) == 4
     val  containsQuinte = handConformsToCriteria(1)(_.rank)(sortByCardRank)(5)(pred)(hand)
+    println(s"handContainsQuinte = ${containsQuinte}")
     containsQuinte match {
       case true => Some(HandEvaluation(HandStrength.QUINTE, Rank.ACE))
       case _ => None

@@ -2,7 +2,7 @@ package com.javaxpert.katas.scala.poker
 
 import com.javaxpert.katas.scala.poker.Color.{DIAMOND, HEART, SPADE, TREFLE}
 import com.javaxpert.katas.scala.poker.HandStrength.{BRELAN, DOUBLE_PAIR, FULL, SQUARRE}
-import com.javaxpert.katas.scala.poker.Rank.{ACE, EIGHT, FIVE, KING, NINE, QUEEN, SEVEN, SIX, TEN, THREE, TWO}
+import com.javaxpert.katas.scala.poker.Rank.{ACE, EIGHT, FIVE, FOUR, KING, NINE, QUEEN, SEVEN, SIX, TEN, THREE, TWO}
 import munit.FunSuite
 
 import scala.math.Ordering.Implicits.*
@@ -79,7 +79,51 @@ class CardsCheckerSpec extends FunSuite{
     )
     assert(HandEvaluation.evaluateScoreFor(Hand(listWithPair))==20)
   }
-  /**
+
+    test("a hand with brelan is scored to 50"){
+    val listWithBrelan = List(
+     Card(FOUR,Color.TREFLE),Card(Rank.FOUR,Color.DIAMOND),Card(Rank.FOUR,Color.SPADE),Card(Rank.TEN,Color.DIAMOND),Card(Rank.NINE,Color.SPADE)
+    )
+      val hand = Hand(listWithBrelan)
+      assert(HandEvaluation.evaluateScoreFor(hand)==50)
+  }
+    test("a hand with four of a kind is scored to 60"){
+      val listFourOfAKind = List(
+        Card(Rank.ACE,Color.SPADE),
+        Card(Rank.ACE,Color.TREFLE),
+        Card(Rank.ACE,Color.DIAMOND),
+        Card(Rank.ACE,Color.HEART),
+        Card(Rank.TWO,Color.HEART)
+      )
+      val hand = Hand(listFourOfAKind)
+      assert(HandEvaluation.evaluateScoreFor(hand)==60)
+    }
+
+    test("a hand with 2 pairs is scored to 40"){
+      val listWith2Pairs = List(
+        Card(Rank.ACE,Color.SPADE),
+        Card(Rank.ACE,Color.TREFLE),
+        Card(Rank.TEN,Color.SPADE),
+        Card(Rank.TEN,Color.TREFLE),
+        Card(Rank.SEVEN,Color.HEART)
+
+      )
+      val hand = Hand(listWith2Pairs)
+      assert(HandEvaluation.evaluateScoreFor(hand)==40)
+    }
+
+    test("a hand with color is scored to 80"){
+      val listWithColor =  List(
+        Card(Rank.FOUR,Color.SPADE),
+        Card(Rank.TEN,Color.SPADE),
+        Card(Rank.TWO,Color.SPADE),
+        Card(Rank.EIGHT,Color.SPADE),
+        Card(Rank.SEVEN,Color.SPADE)
+      )
+      val hand = Hand(listWithColor)
+      assert(HandEvaluation.evaluateScoreFor(hand)==80)
+    }
+
   test("checker detects royal quinte flush"){
 
     val listWithQuinteAceHigh = List(Card(Rank.QUEEN, SPADE), Card(Rank.JACK, SPADE), Card(Rank.KING, Color.SPADE), Card(Rank.TEN, SPADE),Card(Rank.NINE,Color.SPADE))
@@ -107,6 +151,6 @@ class CardsCheckerSpec extends FunSuite{
     )
     assert(HandEvaluation.evaluateScoreFor(Hand(handWithoutSuite))==1)
   }
-*/
+
 
 }

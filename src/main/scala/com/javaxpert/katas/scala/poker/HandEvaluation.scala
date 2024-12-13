@@ -22,7 +22,7 @@ object HandEvaluation{
     //val scoring = scoringFunctions.flatMap(_.apply(hand))
     val scoringOptionsList = scoringFunctions.map(_.apply(hand))
     // TODO show other ways to do that!!!
-    val theOnlySomeScore = scoringOptionsList.filter(p => p.isDefined)(1).get
+    val theOnlySomeScore = scoringOptionsList.filter(p => p.isDefined).map(o => o.get)(0)
     println(s"scoring hand =  ${hand} with value computed = ${theOnlySomeScore}")
     theOnlySomeScore match{
       case HandEvaluation(HandStrength.PAIR,_) => 20
