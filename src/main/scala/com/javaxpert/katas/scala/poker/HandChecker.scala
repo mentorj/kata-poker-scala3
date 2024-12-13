@@ -17,7 +17,9 @@ object HandChecker {
 
 
   def containsPair(hand: Hand): Option[HandEvaluation] =
+    println(s"running containsPair for ${hand}")
     val has1Pair = handConformsToCriteria(1)(_.rank)(sortByCardRank)(2)(_ => true)(hand)
+    println(s"has1Pair ? =${has1Pair}")
     has1Pair  match {
       case true => Some(HandEvaluation(HandStrength.QUINTE, Rank.ACE))
       case _ => None
@@ -62,8 +64,9 @@ object HandChecker {
     }
   }
 
+  
 
-  def hansIsAFull(hand: Hand): Option[HandEvaluation]= {
+  def handIsAFull(hand: Hand): Option[HandEvaluation]= {
     //val  containsFull  = handContainsBrelan(hand) && containsPair(hand)
     val option1  = handContainsBrelan(hand)
     val option2 = containsPair(hand)
@@ -84,7 +87,7 @@ object HandChecker {
   def handContainsQuinte(hand: Hand): Option[HandEvaluation] = {
     val pred = (cards: List[Card]) =>
       Math.abs(cards.apply(0).rank.ordinal - cards.apply(4).rank.ordinal) == 4
-    val  containsQuinte = handConformsToCriteria(1)(_.color)(sortByCardRank)(5)(pred)(hand)
+    val  containsQuinte = handConformsToCriteria(1)(_.rank)(sortByCardRank)(5)(pred)(hand)
     containsQuinte match {
       case true => Some(HandEvaluation(HandStrength.QUINTE, Rank.ACE))
       case _ => None

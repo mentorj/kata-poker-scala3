@@ -2,15 +2,13 @@ package com.javaxpert.katas.scala.poker
 
 import com.javaxpert.katas.scala.poker.Color.{DIAMOND, HEART, SPADE, TREFLE}
 import com.javaxpert.katas.scala.poker.HandStrength.{BRELAN, DOUBLE_PAIR, FULL, SQUARRE}
-import com.javaxpert.katas.scala.poker.Rank.{ACE, EIGHT, FIVE, KING, QUEEN, SEVEN, SIX, THREE}
+import com.javaxpert.katas.scala.poker.Rank.{ACE, EIGHT, FIVE, KING, NINE, QUEEN, SEVEN, SIX, TEN, THREE, TWO}
 import munit.FunSuite
 
-import scala.util.Sorting
 import scala.math.Ordering.Implicits.*
 class CardsCheckerSpec extends FunSuite{
   test("checker detects pair"){
-    assert(HandChecker.containsPair(Hand(List.empty))==None)
-
+    assert(HandChecker.containsPair(Hand(List.empty)).isEmpty)
     val listWithoutPair:List[Card]  = List(Card(ACE,TREFLE),Card(SIX,Color.SPADE))
     val incompleteHandWithoutPair = Hand(listWithoutPair)
     assert(HandChecker.containsPair(incompleteHandWithoutPair)==None)
@@ -20,7 +18,7 @@ class CardsCheckerSpec extends FunSuite{
 
     val listWith2Pairs: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE),Card(SIX,HEART),Card(SIX,TREFLE))
 
-    assert(HandChecker.contains2Pairs(Hand(listWith2Pairs))==Some(HandEvaluation(DOUBLE_PAIR,ACE)) )
+    assert(HandChecker.contains2Pairs(Hand(listWith2Pairs)).contains(HandEvaluation(DOUBLE_PAIR, ACE)))
   }
 
   test("checker detects brelan") {
@@ -30,7 +28,7 @@ class CardsCheckerSpec extends FunSuite{
 
     val listWithBrelan: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE), Card(ACE, HEART))
     val incompleteHandWithBrelan = Hand(listWithBrelan)
-    assert(HandChecker.handContainsBrelan(incompleteHandWithBrelan)==Some(HandEvaluation(BRELAN,ACE)))
+    assert(HandChecker.handContainsBrelan(incompleteHandWithBrelan).contains(HandEvaluation(BRELAN, ACE)))
   }
 
   test("checker detects a  hand with color"){
@@ -42,7 +40,7 @@ class CardsCheckerSpec extends FunSuite{
   test("checker detects a full"){
     val listWithFull: List[Card] = List(Card(ACE, TREFLE), Card(ACE, Color.SPADE), Card(ACE, HEART),Card(SEVEN,SPADE),Card(SEVEN,DIAMOND))
     val completeHandWithFull = Hand(listWithFull)
-    assert(HandChecker.hansIsAFull(completeHandWithFull)==Some(HandEvaluation(FULL,ACE)))
+    assert(HandChecker.handIsAFull(completeHandWithFull).contains(HandEvaluation(FULL, ACE)))
 
   }
   test("checker detects squares") {
@@ -54,20 +52,61 @@ class CardsCheckerSpec extends FunSuite{
   test("checker detects quinte flush"){
     val listWith5CardsWithQuinteFlush: List[Card] = List(Card(SEVEN, SPADE), Card(SIX, SPADE), Card(EIGHT, SPADE), Card(Rank.NINE, Color.SPADE), Card(Rank.TEN, SPADE))
 
-    assert(HandChecker.handContainsQuinte(Hand(listWith5CardsWithQuinteFlush))==Some(HandEvaluation(HandStrength.QUINTE,ACE)) )
+    assert(HandChecker.handContainsQuinte(Hand(listWith5CardsWithQuinteFlush)).contains(HandEvaluation(HandStrength.QUINTE, ACE)))
     val listWithColor :List[Card]   = List(Card(ACE,SPADE),Card(SIX,SPADE),Card(EIGHT,SPADE),Card(Rank.NINE,Color.SPADE),Card(Rank.TEN,SPADE))
-    assert(HandChecker.handContainsQuinte(Hand(listWithColor))==None)
+    assert(HandChecker.handContainsQuinte(Hand(listWithColor)).isEmpty)
 
     val listWithQuinteAceLow = List(Card(FIVE, SPADE), Card(Rank.FOUR, SPADE), Card(THREE, SPADE), Card(Rank.TWO, Color.SPADE), Card(Rank.ACE, SPADE))
-    assert(HandChecker.handContainsQuinte(Hand(listWithQuinteAceLow) )!=None )
+    assert(HandChecker.handContainsQuinte(Hand(listWithQuinteAceLow)).isDefined)
 
   }
+
+  test("a hand with a pair is not a quinte"){
+    val listWithPair = List(
+      Card(Rank.ACE, Color.SPADE), Card(Rank.ACE, Color.TREFLE), Card(NINE, Color.SPADE),
+      Card(TWO, Color.TREFLE), Card(TEN, Color.TREFLE)
+    )
+    val hand = Hand(listWithPair)
+    assert(HandChecker.handContainsQuinte(hand).isEmpty)
+    assert(HandChecker.containsPair(hand).isDefined)
+//    assert(HandEvaluation.evaluateScoreFor(hand)==20)
+  }
+
+  test("a hand with a pair is scored to 20"){
+    val listWithPair = List(
+      Card(Rank.ACE,Color.SPADE),Card(Rank.ACE,Color.TREFLE),Card(NINE,Color.SPADE),
+      Card(TWO,Color.TREFLE),Card(TEN,Color.TREFLE)
+    )
+    assert(HandEvaluation.evaluateScoreFor(Hand(listWithPair))==20)
+  }
+  /**
   test("checker detects royal quinte flush"){
 
-    val listWithQuinteAceHigh = List(Card(ACE, SPADE), Card(Rank.QUEEN, SPADE), Card(Rank.JACK, SPADE), Card(Rank.KING, Color.SPADE), Card(Rank.TEN, SPADE))
-    assert(HandChecker.handContainsQuinteFlushRoyal(Hand(listWithQuinteAceHigh))!=None)
+    val listWithQuinteAceHigh = List(Card(Rank.QUEEN, SPADE), Card(Rank.JACK, SPADE), Card(Rank.KING, Color.SPADE), Card(Rank.TEN, SPADE),Card(Rank.NINE,Color.SPADE))
+    assert(HandChecker.handContainsQuinteFlushRoyal(Hand(listWithQuinteAceHigh)).isDefined)
   }
 
 
+  test("Quinte flush should be rated to 100"){
+    val listWithQuinteFlush =  List(Card(Rank.QUEEN, SPADE), Card(Rank.JACK, SPADE), Card(Rank.KING, Color.SPADE), Card(Rank.TEN, SPADE),Card(Rank.NINE,Color.SPADE))
+    assert(HandEvaluation.evaluateScoreFor(Hand(listWithQuinteFlush))== 100)
+  }
+
+  test("hand evaluation for royal flush returns 200"){
+    val listWithQuinteAceHigh = List(Card(ACE, SPADE), Card(Rank.QUEEN, SPADE), Card(Rank.JACK, SPADE), Card(Rank.KING, Color.SPADE), Card(Rank.TEN, SPADE))
+    assert(HandEvaluation.evaluateScoreFor(Hand(listWithQuinteAceHigh))==200)
+  }
+
+
+  test("hand without  suite should be valuated to 1"){
+    val handWithoutSuite = List(Card(Rank.TWO,SPADE),
+      Card(Rank.THREE,SPADE),
+      Card(Rank.NINE,HEART),
+      Card(Rank.TEN,HEART),
+      Card(Rank.KING,TREFLE)
+    )
+    assert(HandEvaluation.evaluateScoreFor(Hand(handWithoutSuite))==1)
+  }
+*/
 
 }

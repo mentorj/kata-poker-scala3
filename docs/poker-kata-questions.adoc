@@ -70,7 +70,31 @@ Our solution is crappy with 2 evaluations while a single one  is required . Let'
 
 ### Step 9
 
-We can now evaluate  hands with a  scoring policy.
+We are now close from evaluating  hands with a  scoring policy.
 As this rule is a fixed one and will not change we can use _pattern matching_ to give a score to any hand. But before going into scoring we have to refactor our code to get the best cards combo contained into our hand. We have to change our methods returning a boolean to something more useful: an Option wrapping the hand evaluation (strength + rank). Quite a lot of work to do during this round...
 
 hint: we will use most of our high level methods handContainsPair... store them into one collection and find the best evaluation of our hand (as given by the function returning a Some(eval,rank) ) while using the right Collection  function.  Once this result obtained a last function will score the hand...
+
+### Step 9 bis
+We may tempted by another refactoring while seeing some pattern appear into our code base.Unfortunately this refactoring requires quite advanced notions and may lead to quite  unsatisfactory results.  So no step 9 bis..Let 's run to step 10.
+
+This is the pattern as seen in different  functions refactored.
+[source,scala]
+----
+  val  containsQuinte = handConformsToCriteria(1)(_.color)(sortByCardRank)(5)(pred)(hand)
+    containsQuinte match {
+      case true => Some(HandEvaluation(HandStrength.QUINTE, Rank.ACE))
+      case _ => None
+    }
+----
+
+### Step 10
+Here we are , it is time to evaluate our hands , scoring & poker rules are  quite stable so let's goold old _pattern matching_ here. Only one of our functions will return a Some(HandEValuation(score,rank)) all others will return None. This is the trick.
+We can store our functions  in one list and keep the only  one returning a Some (..) for the given hand. Pattern matching for scoring will use artificial values trying to conform to the official ranking of hands.
+
+Comment: this step is quite close from the standard object oriented pattern : Chain of Responsability.
+
+
+### Step 11 : Making our code more idiomatic
+Optional steo...Let's use a couple of syntactic sugars as offered by the Scala language to make it more idiomatic... One laast refactoring...
+
