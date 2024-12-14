@@ -1,12 +1,25 @@
 package com.javaxpert.katas.scala.poker
 
-import com.javaxpert.katas.scala.poker.HandStrength.SQUARRE
+import com.javaxpert.katas.scala.poker.HandStrength.{CARD_VALUE, SQUARRE}
 import com.javaxpert.katas.scala.poker.Rank.ACE
 
 
+/**
+ * offers different functions to check poker combos in a hand
+ */
 object HandChecker {
 
 
+  /**
+   * generic HoF function used heavily by most of the other functions. Offers a great deal of flexibility with different parameters
+   * @param desiredInstances, number of sets for this combo reauired by this criteeria, may 0,1 ( most frequent value),2 (for 2 pairs) 
+   * @param f, how to group cards by color or rank
+   * @param sortBy, how ti sort the card, useful for managing the case of ACE cards
+   * @param patternForSelector, number of cards required for this combo (3 for a three of a kind, 4 for a four of kind..)
+   * @param cardsPostFilterPredicate, predicate used in some cases to filter more accurately
+   * @param hand, target handd to check
+   * @return booleaan, true if the hand conforms to the specified criteria, false otherwise
+   */
   def handConformsToCriteria(desiredInstances: Int)(f: Card => Selectable)(sortBy: (c1:Card,c2:Card) => Boolean) (patternForSelector: Int)(cardsPostFilterPredicate: (List[Card]) => Boolean)(hand: Hand): Boolean =
     hand.cards
       .sortWith(sortBy)
@@ -43,6 +56,14 @@ object HandChecker {
   def sortByCardRank(c1: Card, c2: Card): Boolean =
     c1.rank.ordinal > c2.rank.ordinal
 
+  /**
+   * required to process the ACE cards because these cards have 2 values
+   * straight with ACE,2,3,4,5 or 10,JACK,QUEEN,KING,ACE
+   * this function computes the rank  using ACE 's rank > KING's rank
+   * @param c1, first card to be compared
+   * @param c2, second card 
+   * @return true if c1 has rank greater than the c2 rank false otherwise
+   */
   def sortByAceGreatestRank(c1: Card, c2: Card) ={
     var rank1Ordinal = c1.rank.ordinal
     var rank2Ordinal = c2.rank.ordinal
@@ -63,7 +84,30 @@ object HandChecker {
     }
   }
 
-  
+  /**
+   * function used to rank hands without any specific ccmbo
+   * @param hand, hand to score
+   * @return None if this hand has a combo (pair, flush..), Some(HandEvaluation(HandStrength.CARD_VALUE)) if no combo found
+   */
+  def matchNoCombo(hand: Hand):Option[HandEvaluation] = {
+    val hasRankCombo: Boolean =
+      handConformsToCriteria(1)(_.rank)(sortByCardRank)(2)(_ => true)(hand) ||
+      handConformsToCriteria(1)(_.rank)(sortByCardRank)(3)(_ => true)(hand) ||
+      handConformsToCriteria(1)(_.rank)(sortByCardRank)(4)(_ => true)(hand) ||
+      handConformsToCriteria(2)(_.rank)(sortByCardRank)(2)(_ => true)(hand)
+
+    val hasColorCombo: Boolean = handConformsToCriteria(1)(_.color)(sortByCardRank)(5)(_ => true)(hand)
+
+    val matchCombo = hasColorCombo || hasRankCombo
+    matchCombo match {
+      case true => None
+      // TODO fix rank later
+      case _ => Some(HandEvaluation(CARD_VALUE,Rank.ACE))
+    }
+  }
+
+
+
 
   def handIsAFull(hand: Hand): Option[HandEvaluation]= {
     //val  containsFull  = handContainsBrelan(hand) && containsPair(hand)

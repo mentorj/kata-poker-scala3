@@ -14,6 +14,7 @@ object HandEvaluation{
   val scoringFunctions:List[Hand => Option[HandEvaluation]] = List(
     containsPair,handContainsBrelan,handContainsQuinteFlushRoyal,
     handContainsQuinte,handContainsColor,contains2Pairs,handContainsSquare,
+    matchNoCombo
   )
   println(s"handEvaluation ${scoringFunctions}")
   def evaluateScoreFor(hand:Hand):Int =
@@ -23,6 +24,7 @@ object HandEvaluation{
     val scoringOptionsList = scoringFunctions.map(_.apply(hand))
     // TODO show other ways to do that!!!
     val theOnlySomeScore = scoringOptionsList.filter(p => p.isDefined).map(o => o.get)(0)
+    
     println(s"scoring hand =  ${hand} with value computed = ${theOnlySomeScore}")
     theOnlySomeScore match{
       case HandEvaluation(HandStrength.PAIR,_) => 20
